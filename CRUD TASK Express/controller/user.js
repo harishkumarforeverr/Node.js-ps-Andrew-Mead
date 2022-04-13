@@ -58,7 +58,7 @@ const GetById = (req, res) => {
   res.send(userFound);
 };
 
-//DELETE user /// completed
+//DELETE user /// completed?hs=hahah&nsn=233
 const deleteUserById = (req, res) => {
   const { id } = req.params;
   console.log(id);
