@@ -1,5 +1,6 @@
 total : 35hrs
 34/2==17days 
 
-progress
-1) completed the 0th, 1st, 2nd
+progress (Total section : 18 and  total hrs : 35)
+1) sections completed the 0th, 1st, 2nd,3rd,4th,5th section
+2) hours left 35-4=> 31hrs are left 

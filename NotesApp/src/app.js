@@ -28,23 +28,44 @@ yargs.command({
 yargs.command({
   command: "remove",
   describe: "removing a new notes",
-
-  handler() {
-    console.log("a notes is removed");
+  builder: {
+    title: {
+      describe: "title of notes to be deleted",
+      demandOption: true,
+      type: "string",
+    },
+  },
+  handler(argv) {
+    notes.deleteNotes(argv.title);
+    console.log("a notes is removed", argv.title);
   },
 });
 yargs.command({
   command: "list",
   describe: "listing all the notes",
   handler() {
-    console.log("listing all the notes");
+    const data = notes.loadNotes();
+    console.log(chalk.blue.inverse("your notes"));
+    data.forEach(({ title }) => console.log(chalk.green.inverse(title)));
   },
 });
 yargs.command({
   command: "read",
   describe: "reading all the notes",
-  handler() {
-    console.log("reading all the notes");
+  builder: {
+    title: {
+      describe: "title of the record",
+      demandOption: true,
+      type: "string",
+    },
+  },
+  handler(argv) {
+    console.log(argv.title);
+    if (notes.ReadNotes(argv.title)) {
+      console.log(chalk.green.inverse("Notes  was found"));
+    } else {
+      console.log(chalk.red.inverse("No notes was found"));
+    }
   },
 });
 // console.log(yargs.argv);

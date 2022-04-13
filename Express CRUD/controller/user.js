@@ -8,6 +8,12 @@ const createUser = (req, res) => {
     ...req.body,
     id: uuidv4(),
   };
+  const users = loadData();
+  const userFound = users.find((user) => user.firstName == newUser.firstName);
+  console.log("userFound", userFound);
+  if (userFound) {
+    return res.send("user name is already taken try with differnt user");
+  }
   SaveDate([newUser]);
   res.send("new user is created sucessfully ");
 };
