@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const hbs = require("hbs");
+const geoCode = require("./utils/geocode.js");
+const forecast = require("./utils/forecast.js");
 const app = express();
 
 // setting the paths
@@ -41,18 +43,42 @@ app.get("/about", (req, res) => {
 });
 
 app.get("/weather", (req, res) => {
-  res.send([
-    {
-      name: "harish",
-      age: 10,
-    },
-    {
-      name: "neha",
-      age: 20,
-    },
-  ]);
+  console.log(req.query);
+  if (!req.query.address) {
+    return res.send({
+      error: "please provide a address",
+    });
+  }
+  geoCode(req.query.address, (error, { long, lat, desc } = {}) => {
+    if (error) {
+      return res.send({ error });
+    }
+    console.log(long, lat, desc);
+    forecast(long, lat, (err, forcastData) => {
+      // console.log(err, forcastData);
+      if (err) {
+        return res.send({ err });
+      }
+      res.send({
+        forcast: forcastData,
+        describtion: desc,
+        address: req.query.address,
+      });
+    });
+  });
 });
-
+// app.get("/products", (req, res) => {
+//   console.log(req.query);
+//   const { query } = req;
+//   if (!query.name) {
+//     return res.send({
+//       error: "please provide name",
+//     });
+//   }
+//   res.send({
+//     products: [],
+//   });
+// });
 app.get("/help/*", (req, res) => {
   res.render("helpNotFound");
 });
@@ -62,7 +88,3 @@ app.get("*", (req, res) => {
 app.listen(9999, () => {
   console.log(`server as started at http://localhost:9999/`);
 });
-
-// key pints to tell the node.js to watch .hbs file files also we need to write
-// these cmd in the termial
-/// nodemon node app.js -e js,hbs
