@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+var Validator = require("validator");
 const User = mongoose.model("users", {
   name: {
     type: String,
@@ -46,10 +48,20 @@ const User = mongoose.model("users", {
   },
 });
 
-
+module.exports = User;
 
 // const me = new User({
 //   name: "Satish",
 //   email: "SatishkumaR@gmail.com",
 //   password: "1234567pas",
 // });
+// const main = async () => {
+//   try {
+//     const res = await me.save();
+//     console.log(res);
+//   } catch (error) {
+//     console.log("something went wrong", error);
+//   }
+// };
+
+// main();

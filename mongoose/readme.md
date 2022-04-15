@@ -8,3 +8,6 @@ moogoose
    https://mongoosejs.com/docs/schematypes.html
 
 4. status codes https://www.webfx.com/web-development/glossary/http-status-codes/
+
+5. moogoose all query
+   https://mongoosejs.com/docs/queries.html
