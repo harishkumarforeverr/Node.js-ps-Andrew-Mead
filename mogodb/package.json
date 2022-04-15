@@ -1,0 +1,15 @@
+{
+  "name": "mogodb",
+  "version": "1.0.0",
+  "description": "mogooses docs\r https://mongodb.github.io/node-mongodb-native/4.5/\r and\r npm ==> https://www.npmjs.com/package/mongodb",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^4.5.0"
+  }
+}
