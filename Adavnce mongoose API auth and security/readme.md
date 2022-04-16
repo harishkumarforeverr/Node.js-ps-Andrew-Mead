@@ -17,3 +17,9 @@ moogoose
 
 7. to start the mongodb server type these in git blash terminal
    mongod.exe --dbpath ~/db
+
+8. is userInstance property is mofiyed before saving
+   https://mongoosejs.com/docs/api.html#document_Document-isModified
+
+9. we can add statics function to our model
+   https://mongoosejs.com/docs/guide.html#statics
