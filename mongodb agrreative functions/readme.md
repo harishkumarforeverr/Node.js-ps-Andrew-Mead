@@ -4,9 +4,7 @@
 
 3. db.tests.insert({name:"harish"})
 
-4. db.dropDatabase();
-
-///// crreate and drop collections in database
+0. db.dropDatabase(); 
 
 1. use demo;
 
@@ -127,13 +125,13 @@
 39. db.users.find({name:"harish"}).count();
     db.users.find({}).count();
 
-40. $match
+40. $match /// match is used to filter the items based on the condition
     db.users.aggregate(
     [
     { $match:{ age : { $gt:22 }} }
     ])
 
-41. $group
+41. $group    /// here its used to group the items for example if we have A,B,C,A,B as deperment names the by grouping it will give us just A,B,C only becoz its grouped all of them in into one caterorgry
     db.users.aggregate([
     {$group: {\_id:"$age"}} // here _id is mandatory
     ])
@@ -146,7 +144,7 @@
     c. db.users.aggregate([{ $group : {_id:"$age"}}, {$skip: 1}, {$sort: {_id:1}}])
     d. db.users.aggregate([{ $group : {_id:"$age"}}, {$skip: 1}, {$sort: {_id:1}}])
 
-43. $project
+43. $project /// is used to give us controll how data should render like just showing limit amount of fields only
     1. db.users.aggregate([
        {
        $match: {"status" : "active"}
@@ -175,7 +173,7 @@
        $project : {fullname:"$name",userage:"$age",_id:0}
        }
        ])
-44. $type
+44. $type // is used to give the type of the varibale
     1. db.users.aggregate([
        {
        $match : { status :"active"}
@@ -205,7 +203,7 @@
        },
        ]);
 
-46. $count
+46. $count give the no of counts that are come out of the results
 
     1. db.users.aggregate([
        {
@@ -218,7 +216,7 @@
        { $count : "mycount"}
        ])
 
-47. $limit
+47. $limit is used to limit the no of records
     1. db.users.aggregate([
        {
        $match: { status: "inactive" },
@@ -244,7 +242,8 @@
        }
        ]);
 
-49. $lookup (pending output not came)
+49. $lookup // is used to link the realtion between two collections
+
     1. db.users.aggregate({
        $lookup: {
        from: "harishCollection",
@@ -253,3 +252,66 @@
        as: "anything",
        },
        });
+    2. example
+       db.dep.insertMany([
+       {
+       name: "Tech",
+       code: 123,
+       },
+       {
+       name: "HR",
+       code: 223,
+       },
+       {
+       name: "Devops",
+       code: 323,
+       },
+       ]);
+       db.users.insertMany([
+       {
+       name: "harish",
+       dept: "Tech",
+       },
+       {
+       name: "satish",
+       dept: "HR",
+       },
+       {
+       name: "manish",
+       dept: "Tech",
+       },
+       ]);
+
+       db.users.aggregate([
+       {
+       $lookup: {
+       from: "dep",
+       localField: "dept",
+       foreignField: "name",
+       as: "anything",
+       },
+       },
+       ]);  
+       /// OVERALL THEME IS HERE
+       in depertment "name" property
+       and
+       user collection "dep" both must be need to be same then only these gone work
+
+       db.users.aggregate([
+       {
+       $match:{
+       school:"private"
+       }
+       },
+       {
+       $project :{
+       _id:0,
+       name:1,
+       age:1,
+       langugaes:1
+       }
+       },
+       {
+       $unwind:"$langugaes"
+       }
+       ]).pretty();

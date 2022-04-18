@@ -98,10 +98,40 @@ db.users.insertMany([
     style: [41, 42, 43, 44, 45],
   },
 ]);
+
+ 
+db.dep.insertMany([
+  {
+    name: "Tech",
+    code: 123,
+  },
+  {
+    name: "HR",
+    code: 223,
+  },
+  {
+    name: "Devops",
+    code: 323,
+  },
+]); 
+db.users.insertMany([
+  {
+    name: "harish",
+    dept: "Tech",
+  },
+  {
+    name: "satish",
+    dept: "HR",
+  },
+  {
+    name: "manish",
+    dept: "Tech",
+  },
+]); 
 db.users.aggregate({
   $lookup: {
-    from: "users",
-    localField: "dep",
+    from: "dep",
+    localField: "dept",
     foreignField: "name",
     as: "anything",
   },
