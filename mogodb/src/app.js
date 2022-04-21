@@ -7,7 +7,7 @@ const dbName = "TaskManger";
 async function main() {
   await client.connect();
   console.log("connection is setup sucessfully");
-  const db = client.db(dbName);
+  const db = client.db(dbName); 
   // collection for user
   try {
     // users Collections

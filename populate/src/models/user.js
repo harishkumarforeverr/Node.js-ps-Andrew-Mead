@@ -1,0 +1,39 @@
+const mongoose = require("mongoose");
+var Validator = require("validator");
+const User = mongoose.model("users", {
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  age: {
+    type: Number,
+    default: 0,
+    validate: {
+      validator: function (val) {
+        if (val < 0) {
+          throw new Error("age muste be greater than 0");
+        }
+      },
+    },
+  },
+});
+
+
+module.exports = User;
+
+// const me = new User({
+//   name: "Satish",
+//   email: "SatishkumaR@gmail.com",
+//   password: "1234567pas",
+// });
+// const main = async () => {
+//   try {
+//     const res = await me.save();
+//     console.log(res);
+//   } catch (error) {
+//     console.log("something went wrong", error);
+//   }
+// };
+
+// main();
