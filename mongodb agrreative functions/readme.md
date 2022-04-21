@@ -1,3 +1,5 @@
+0. to start the mongodb server type these in git blash terminal mongod.exe --dbpath ~/db
+
 1. show dbs
 
 2. use tests (here tests is database name )
@@ -243,6 +245,11 @@
        ]);
 
 49. $lookup // is used to link the realtion between two collections
+          https://www.mongodb.com/docs/manual/reference/operator/aggregation/lookup/
+           THEME is 
+            it will collect the datafileds from the another collection and add to the current Object which we are manipulating in aggretate stage and by adding that extra property we can render or send to user
+            and main point is 
+            localfield values and foriegnield value must be same undali then only the answer or output will come
 
     1. db.users.aggregate({
        $lookup: {
