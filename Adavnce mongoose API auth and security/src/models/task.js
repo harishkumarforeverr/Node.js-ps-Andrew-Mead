@@ -11,9 +11,15 @@ const Task = mongoose.model("tasks", {
     type: Boolean,
     default: false,
   },
-}); 
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "users",
+  },
+});
 
 module.exports = Task;
+
 // const task1 = new Task({
 //   description: "ffddsf",
 //   completed: true,

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 var Validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Task = require("./task");
 const userSchema = mongoose.Schema({
   name: {
     type: String,
@@ -56,6 +57,22 @@ const userSchema = mongoose.Schema({
       },
     },
   },
+});
+
+/// make a connection btn the user collection and task collection
+
+// these examplet is copyed from the mongodb offical docs just for refernce anthi
+// blogPostSchema.virtual('author', {
+//   ref: 'User',
+//   localField: 'authorId',
+//   foreignField: '_id',
+//   justOne: true
+// });
+
+userSchema.virtual("mytasks", {
+  ref: "tasks",
+  localField: "_id",
+  foreignField: "owner",
 });
 
 // these method are accessed on the userscheme Object ( like in C++ these  are accessed on the Users Object, or instante)
@@ -120,6 +137,12 @@ userSchema.pre("save", async function (next) {
     const password = user.password;
     user.password = await bcrypt.hash(password, 8);
   }
+  next();
+});
+
+userSchema.pre("remove", async function (next) {
+  const user = this;
+  await Task.deleteMany({ owner: user.id });
   next();
 });
 const User = mongoose.model("users", userSchema);

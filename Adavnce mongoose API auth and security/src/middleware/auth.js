@@ -4,7 +4,7 @@ const auth = async (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
     const validateToken = jwt.verify(token, "harishkumar(securityKey)");
- 
+
     const findUser = await User.findOne({
       _id: validateToken._id,
       "tokens.token": token,
@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
     req.token = token;
     next();
   } catch (e) {
-    res.status(402).send("please authencate to login");
+    res.status(402).send("please authencate to continue   ");
   }
 };
 

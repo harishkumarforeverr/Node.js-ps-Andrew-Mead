@@ -1,21 +1,25 @@
 const express = require("express");
+const auth = require("../middleware/auth.js");
 const Task = require("../models/task.js");
-
+const User = require("../models/user.js");
 const Router = express.Router();
 // CRUD
-Router.get("/", async (req, res) => {
+Router.get("/", auth, async (req, res) => {
   try {
-    const results = await Task.find({});
-    console.log(results);
-    res.send(results); 
+    // method -1
+    // const results = await Task.find({ owner: req.user.id });
+    // console.log(results);
+    // method -2
+    await req.user.populate("mytasks");
+    res.send(req.user.mytasks);
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send("error");
   }
 });
-Router.get("/:id", async (req, res) => {
-  const id = req.params.id;
+Router.get("/:id", auth, async (req, res) => {
+  const _id = req.params.id;
   try {
-    const results = await Task.findById(id);
+    const results = await Task.findOne({ _id, owner: req.user.id });
     console.log(results);
     if (!results) {
       return res.status(400).send("no tasks are found");
@@ -25,9 +29,13 @@ Router.get("/:id", async (req, res) => {
     res.status(500).send(error);
   }
 });
-Router.post("/", async (req, res) => {
+Router.post("/", auth, async (req, res) => {
   try {
-    const newTask = new Task(req.body);
+    const updatedObject = {
+      ...req.body,
+      owner: req.user._id,
+    };
+    const newTask = new Task(updatedObject);
     const result = await newTask.save();
     console.log(result);
     res.status(201).send("new stack is created sucessfully");
@@ -35,7 +43,7 @@ Router.post("/", async (req, res) => {
     res.status(400).send(error);
   }
 });
-Router.put("/:id", async (req, res) => {
+Router.put("/:id", auth, async (req, res) => {
   const allowedKeys = ["description", "completed"];
   const userPassedKeys = Object.keys(req.body);
   const passedCorrectKeysBoolean = userPassedKeys.every((val) =>
@@ -49,7 +57,8 @@ Router.put("/:id", async (req, res) => {
     //   new: true,
     //   runValidators: true,
     // });
-    const data = await Task.findById(req.params.id);
+    const data = await Task.findOne({ _id: req.params.id, owner: req.user.id });
+    // console.log(data, { _id: req.params.id, owner: req.body.id });
     if (!data) {
       return res.status(400).send("no user found with that id");
     }
@@ -63,11 +72,14 @@ Router.put("/:id", async (req, res) => {
     res.status(500).send(error);
   }
 });
-Router.delete("/:id", async (req, res) => {
+Router.delete("/:id", auth, async (req, res) => {
   // {new:true, runValidators:true}
   try {
-    console.log(req.params.id, req.body);
-    const data = await Task.findByIdAndDelete(req.params.id);
+    // console.log(req.params.id, req.body);
+    const data = await Task.findOneAndDelete({
+      _id: req.params.id,
+      owner: req.user.id,
+    });
     console.log(data);
     if (!data) {
       return res.status(400).send("no user found with that id");
