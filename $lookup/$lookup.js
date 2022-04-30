@@ -4,7 +4,7 @@ const students = [
     age: 22,
     course: "nodejs",
   },
-  {
+  { 
     name: "seenu",
     age: 21,
     course: "css",

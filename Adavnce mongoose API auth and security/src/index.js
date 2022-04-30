@@ -1,10 +1,26 @@
 const express = require("express");
 require("./db/db.js");
+// require("../jsonwebtoken/jsonwebtoken.js");
+require("./toJSON");
 const userRouter = require("./controllers/user.js");
 const TaskRouter = require("./controllers/tasks.js");
 const app = express();
 const PORT = process.env.PORT || 9000;
 app.use(express.json());
+
+// express middile start here
+// KYEPOINTS: always remeber these  express midlle must be in at top all user defined routes
+// app.use((req, res, next) => {
+//   // console.log("working", req.path, req.method);
+//   if (req.method == "GET") {
+//     return res.send("get request are  probident");
+//   }
+//   next();
+// });
+// app.use((req, res, next) => {
+//   return res.status(503).send("site is under maintaince, try after few months");
+// });
+// express middile ends here
 app.use("/users", userRouter);
 app.use("/tasks", TaskRouter);
 
@@ -21,3 +37,9 @@ app.listen(PORT, () => {
 //   console.log(res);
 // };
 // main();
+
+/// populate example
+const User = require("./models/user.js");
+const Tasks = require("./models/task.js");
+
+

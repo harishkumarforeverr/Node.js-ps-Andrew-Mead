@@ -1,0 +1,13 @@
+const obj = {
+  name: "harish",
+  age: 21,
+};
+console.log(obj);
+
+obj.toJSON = function () {
+  console.log(this);
+  delete this.age;
+  return this;
+};
+
+console.log(JSON.stringify(obj), "ok");

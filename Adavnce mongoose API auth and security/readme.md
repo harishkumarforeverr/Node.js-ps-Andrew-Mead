@@ -1,5 +1,7 @@
 moogoose
 
+0. to start the mongodb server type these in git blash terminal mongod.exe --dbpath ~/db
+
 1. npm link ==> https://www.npmjs.com/package/mongoose
 
 2. offical link ==> https://mongoosejs.com/

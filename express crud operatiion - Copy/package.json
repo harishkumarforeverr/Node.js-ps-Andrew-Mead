@@ -1,0 +1,25 @@
+{
+  "name": "express-crud",
+  "version": "1.0.0",
+  "description": "pratising the express",
+  "main": "index.js",
+  "scripts": {
+    "start": " node index.js"
+  },
+  "author": "harishkumarforever",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.12.17",
+    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-react": "^7.16.5",
+    "@react-pdf/renderer": "^2.1.1",
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-runtime": "^6.26.0",
+    "express": "^4.17.3",
+    "nodemon": "^2.0.15",
+    "react": "^16.13.1",
+    "uuid": "^8.3.2"
+  }
+}

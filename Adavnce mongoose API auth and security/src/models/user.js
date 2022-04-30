@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 var Validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const userSchema = mongoose.Schema({
   name: {
     type: String,
@@ -36,6 +37,14 @@ const userSchema = mongoose.Schema({
       },
     },
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+        trim: true,
+      },
+    },
+  ],
   age: {
     type: Number,
     default: 0,
@@ -49,17 +58,45 @@ const userSchema = mongoose.Schema({
   },
 });
 
+// these method are accessed on the userscheme Object ( like in C++ these  are accessed on the Users Object, or instante)
+/// these one must be not arrow function becoz in arrow function this keyword refer to the global scope
+userSchema.methods.generateJsonWebToken = async function () {
+  const user = this;
+  // console.log(user, user._id.toString());
+  const token = jwt.sign(
+    { _id: user._id.toString() },
+    "harishkumar(securityKey)"
+  );
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
+  // console.log("tokentoken",token);
+  return token;
+};
+// userSchema.methods.toJSON = async function () {
+//   const user = this;
+//   const updatedObject = user.toObject();
+//   console.log(updatedObject);
+//   delete updatedObject.tokens;
+//   delete updatedObject.password;
+
+//   console.log(updatedObject);
+//   return user;
+//   // return "updatedObject";
+// };
+
 /// validating the user email and password and by adding the static method to the schema Model
+// note static method are access on the user scheme ( like in c++ class static methods)
 
 userSchema.statics.validUserLogin = async (email, password) => {
   const findingUser = await User.findOne({ email });
-  console.log("findingUser", findingUser);
+  // console.log("findingUser", findingUser);
   if (!findingUser) {
     throw new Error("no user was found with that email");
   }
   const passwordValidate = await bcrypt.compare(password, findingUser.password);
-  console.log("findingUser", passwordValidate);
+  // console.log("findingUser", passwordValidate);
   if (!passwordValidate) {
+    // console.log("findingUser", passwordValidate);
     throw new Error("please provide a valid password");
   }
   return findingUser;
