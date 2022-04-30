@@ -4,13 +4,34 @@ const Task = require("../models/task.js");
 const User = require("../models/user.js");
 const Router = express.Router();
 // CRUD
+// console.log(Boolean(""));
 Router.get("/", auth, async (req, res) => {
+  console.log(req.query.completed);
   try {
     // method -1
     // const results = await Task.find({ owner: req.user.id });
     // console.log(results);
     // method -2
-    await req.user.populate("mytasks");
+    // await req.user.populate("mytasks");
+    // method-2 only but modify it for excepting the query values
+    let match = {
+      completed: req.query.completed === "true" ? true : false,
+    };
+    if (!req.query.completed) {
+      match = {};
+    }
+    console.log(match);
+    await req.user.populate({
+      path: "mytasks",
+      match,
+      options: {
+        limit: req.query.limit ? parseInt(req.query.limit) : 0,
+        skip: req.query.skip ? parseInt(req.query.skip) : 0,
+        sort: {
+          createdAt: req.query.createdAt ? parseInt(req.query.createdAt) : 1,
+        },
+      },
+    });
     res.send(req.user.mytasks);
   } catch (error) {
     res.status(500).send("error");
@@ -20,7 +41,7 @@ Router.get("/:id", auth, async (req, res) => {
   const _id = req.params.id;
   try {
     const results = await Task.findOne({ _id, owner: req.user.id });
-    console.log(results);
+    // console.log(results);
     if (!results) {
       return res.status(400).send("no tasks are found");
     }

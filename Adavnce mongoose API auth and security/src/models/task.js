@@ -1,22 +1,27 @@
 const mongoose = require("mongoose");
 // mongoose.connect("mongodb://localhost:27017/TaskManagerAPI");
-
-const Task = mongoose.model("tasks", {
-  description: {
-    type: String,
-    required: true,
-    trim: true,
+const TaskSchema = mongoose.Schema(
+  {
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "users",
+    },
   },
-  completed: {
-    type: Boolean,
-    default: false,
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "users",
-  },
-});
+  {
+    timestamps: true,
+  }
+);
+const Task = mongoose.model("tasks", TaskSchema);
 
 module.exports = Task;
 

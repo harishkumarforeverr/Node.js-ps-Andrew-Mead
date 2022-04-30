@@ -3,61 +3,66 @@ var Validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Task = require("./task");
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  email: {
-    type: String,
-    lowercase: true,
-    trim: true,
-    required: true,
-    unique: true,
-    validate: {
-      validator: (val) => {
-        if (!Validator.isEmail(val)) {
-          throw new Error("Please provide a valid mail");
-        }
+const userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      required: true,
+      unique: true,
+      validate: {
+        validator: (val) => {
+          if (!Validator.isEmail(val)) {
+            throw new Error("Please provide a valid mail");
+          }
+        },
+      },
+    },
+    password: {
+      type: String,
+      trim: true,
+      required: true,
+      minLength: 7,
+      validate: {
+        validator: (val) => {
+          if (val.toLowerCase().includes("password")) {
+            throw new Error(
+              "password values should not coantin the assword string"
+            );
+          }
+        },
+      },
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          trim: true,
+        },
+      },
+    ],
+    age: {
+      type: Number,
+      default: 0,
+      validate: {
+        validator: function (val) {
+          if (val < 0) {
+            throw new Error("age muste be greater than 0");
+          }
+        },
       },
     },
   },
-  password: {
-    type: String,
-    trim: true,
-    required: true,
-    minLength: 7,
-    validate: {
-      validator: (val) => {
-        if (val.toLowerCase().includes("password")) {
-          throw new Error(
-            "password values should not coantin the assword string"
-          );
-        }
-      },
-    },
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        trim: true,
-      },
-    },
-  ],
-  age: {
-    type: Number,
-    default: 0,
-    validate: {
-      validator: function (val) {
-        if (val < 0) {
-          throw new Error("age muste be greater than 0");
-        }
-      },
-    },
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 /// make a connection btn the user collection and task collection
 
