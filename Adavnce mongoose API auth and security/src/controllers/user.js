@@ -1,9 +1,72 @@
 const auth = require("../middleware/auth.js");
 const express = require("express");
 const User = require("../models/user.js");
-
+const multer = require("multer");
 const Router = express.Router();
+const sharp = require("sharp");
 // CRUD
+
+const upload = multer({
+  // dest: "images",
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter(req, file, next) {
+    if (!file.originalname.match(/\.(pdf||png)$/)) {
+      return next(new Error("upload a file"));
+    }
+    next(undefined, true);
+  },
+});
+Router.get(
+  "/upload/me",
+  auth,
+  upload.single("avatar"),
+  async (req, res) => {
+    // here avatar name must be match with the name of form data in fronted
+    // console.log();
+
+    const buffer = await sharp(req.file.buffer)
+      .resize({
+        width: 250,
+        height: 250,
+      })
+      .png()
+      .toBuffer();
+    req.user.avatar = buffer;
+    await req.user.save();
+    res.status(200).send("uploaded");
+  },
+  (error, req, res, next) => {
+    res.status(404).json({
+      error: error.message,
+      message: "please upload a valid file pdf or png",
+    });
+  }
+);
+Router.delete("/upload/me", auth, async (req, res) => {
+  try {
+    req.user.avatar = undefined;
+    await req.user.save();
+    res.status(200).send("user profile photo deleted sucessfully");
+  } catch (error) {
+    res.status(500).send("something went wrong try again");
+  }
+});
+
+Router.get("/upload/:id/avatar", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const user = await User.findById(_id);
+    if (!user.avatar) {
+      res.status(404).send("user doesnt have photo");
+    }
+    res.set("Content-Type", "image/jpg");
+    res.status(200).send(user.avatar);
+  } catch (error) {
+    res.status(500).send("somthing went wrong try again");
+  }
+});
 
 Router.get("/login", async (req, res) => {
   try {
