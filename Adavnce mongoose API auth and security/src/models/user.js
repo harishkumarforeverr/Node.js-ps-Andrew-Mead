@@ -90,7 +90,7 @@ userSchema.methods.generateJsonWebToken = async function () {
   // console.log(user, user._id.toString());
   const token = jwt.sign(
     { _id: user._id.toString() },
-    "harishkumar(securityKey)"
+    process.env.SECURITY_KEY
   );
   user.tokens = user.tokens.concat({ token });
   await user.save();
@@ -111,7 +111,7 @@ userSchema.methods.generateJsonWebToken = async function () {
 
 /// validating the user email and password and by adding the static method to the schema Model
 // note static method are access on the user scheme ( like in c++ class static methods)
-
+//ok
 userSchema.statics.validUserLogin = async (email, password) => {
   const findingUser = await User.findOne({ email });
   // console.log("findingUser", findingUser);
