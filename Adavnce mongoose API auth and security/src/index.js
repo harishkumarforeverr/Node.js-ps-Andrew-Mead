@@ -5,7 +5,7 @@ require("./db/db.js");
 const userRouter = require("./controllers/user.js");
 const TaskRouter = require("./controllers/tasks.js");
 const app = express();
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT;
 app.use(express.json());
 
 // express middile start here
@@ -28,6 +28,8 @@ app.listen(PORT, () => {
   console.log(`server is started at the PORT : ${PORT}`);
 });
 
+// yarn run env-cmd node log.js
+console.log("NODE_ENV:", process.env.PORT);
 // const bcrypt = require("bcryptjs");
 // const password = "harish123";
 // const main = async () => {

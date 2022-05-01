@@ -25,3 +25,13 @@ moogoose
 
 9. we can add statics function to our model
    https://mongoosejs.com/docs/guide.html#statics
+
+10. heroku create AppNAME
+
+11. heroku config:set key=value key=value key=value ...etc
+
+12. heroku config:unset keyName
+
+13. heroku config
+
+14. git push heroku master
