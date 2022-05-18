@@ -1,4 +1,4 @@
-0. to start the mongodb server type these in git blash terminal mongod.exe --dbpath ~/db
+0. to start the mongodb server type these in git blash terminal mongod.exe --dbpath ~/db  then type mongo in the terminal
 
 1. show dbs
 
